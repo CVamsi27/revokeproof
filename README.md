@@ -113,8 +113,17 @@ The canary window closes before asynchronous cleanup. Later events cannot mutate
 
 `examples/baseline.js` is a plain Playwright implementation of the same three synthetic scenarios and observation windows. `npm run measure` launches one Chromium, uses a fresh server and two browser contexts per sample, alternates execution order, and emits JSON with actual wall time, observation/cleanup duration, launch cost, versions, and expected/observed verdicts. Browser download and human setup time are excluded. No speed advantage or setup saving is inferred from these fixture timings.
 
-Implemented checks have been exercised locally on macOS/arm64 with Node 23.7.0 and Playwright 1.64.1. Node >=22 is the declared engine range; other Node/platform profiles are not yet verified. Promotion requires independent developers to integrate a real test and retain it on a later change. Independent developer trials and retained use remain unvalidated; no outreach occurred. Source/release distribution is separate from npm registry publication.
+Implemented checks have been exercised locally on macOS/arm64 with Node 23.7.0 and Playwright 1.64.1. Node >=22 is the declared engine range; current public-alpha profiles are listed below; other combinations remain unverified. Promotion requires independent developers to integrate a real test and retain it on a later change. Independent developer trials and retained use remain unvalidated; no outreach occurred. Source/release distribution is separate from npm registry publication.
 
 ## Standalone project
 
 This folder owns its source, tests, examples, TypeScript consumer check, npm lockfile and development scripts. It needs no lab checkout or sibling package. Browser installation is explicit (`npx playwright install chromium`). See [verification](docs/verification.md) and the [validation plan](docs/validation-plan.md).
+
+## Verified alpha profiles
+
+| Profile | Verified scope |
+| --- | --- |
+| Ubuntu 24.04, Node 24.22.1, hosted GitHub CI | Source checks and independent packed consumers |
+| macOS arm64, Node 24.22.1, OrbStack | Local declared container/browser integration described in verification |
+
+Actual Chromium helper/baseline cases and the ordinary Playwright example also passed on that hosted Linux runner. See [public alpha readiness](docs/public-alpha.md) for immutable CI evidence, distribution and remaining gates. Other runtime/OS/engine combinations remain unverified.
