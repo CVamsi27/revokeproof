@@ -1,0 +1,51 @@
+{
+  "name": "@developer-pain-lab/revokeproof",
+  "version": "0.1.0-alpha.0",
+  "description": "Keep the original capability across revocation and verify control-backed observations",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "exports": {
+    "types": "./src/index.d.ts",
+    "default": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "examples",
+    "docs",
+    "README.md",
+    "LICENSE",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "test:integration": "node tests/integration.js",
+    "measure": "node examples/measure.js",
+    "demo": "node examples/demo.js",
+    "example": "playwright test --config examples/playwright.config.js",
+    "check": "node scripts/check.js",
+    "pack:check": "node scripts/verify-package.js"
+  },
+  "peerDependencies": {
+    "@playwright/test": ">=1.50.0 <2"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "ws": "8.22.1",
+    "@types/node": "22.15.21",
+    "typescript": "5.9.3"
+  },
+  "types": "./src/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CVamsi27/revokeproof.git"
+  },
+  "homepage": "https://github.com/CVamsi27/revokeproof#readme",
+  "bugs": {
+    "url": "https://github.com/CVamsi27/revokeproof/issues"
+  }
+}
