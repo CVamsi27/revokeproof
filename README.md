@@ -17,7 +17,7 @@ npm run check
 npm run example
 ```
 
-The example target must be new. Container-backed commands below require OrbStack and explicit local image preparation. They use the Docker-compatible CLI connected to OrbStack; Docker Desktop is not required. Missing engine, browser, image, collector or cleanup evidence remains a failure.
+Browser integration uses matching Playwright Chromium against its explicitly started synthetic loopback server. No container engine is required for this helper. A missing browser, dead event source or failed cleanup remains a failure.
 
 To use a tarball in another project, download this project's `.tgz` from its release and run `npm install --save-dev /absolute/path/to/the-downloaded.tgz`. Install `@playwright/test@1.64.1` and `ws@8.22.1` explicitly for the shipped browser example. The reusable helper itself does not need the synthetic server.
 
@@ -124,6 +124,6 @@ This folder owns its source, tests, examples, TypeScript consumer check, npm loc
 | Profile | Verified scope |
 | --- | --- |
 | Ubuntu 24.04, Node 24.22.1, hosted GitHub CI | Source checks and independent packed consumers |
-| macOS arm64, Node 24.22.1, OrbStack | Local declared container/browser integration described in verification |
+| macOS arm64, Node 24.22.1, Chromium | Local synthetic HTTP/WebSocket integration described in verification |
 
 Actual Chromium helper/baseline cases and the ordinary Playwright example also passed on that hosted Linux runner. See [public alpha readiness](docs/public-alpha.md) for immutable CI evidence, distribution and remaining gates. Other runtime/OS/engine combinations remain unverified.
