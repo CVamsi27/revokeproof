@@ -18,6 +18,8 @@ node node_modules/@developer-pain-lab/revokeproof/examples/demo.js fixed
 
 Run the same demo with `broken` to observe a violation and exit 1, or `dead-source` to observe incomplete evidence and exit 3. The fixed case exits 0. The example uses Chromium and a synthetic loopback server.
 
+[Case study: HTTP denies access while an original WebSocket still receives events](docs/case-study.md). Compare the broken, fixed, and quiet-stream controls and adapt the copied Playwright test.
+
 Copy the ordinary Playwright test into a new folder in your test project:
 
 ```sh
