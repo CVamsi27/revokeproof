@@ -6,26 +6,26 @@ Test whether an already-open connection still receives protected events after th
 
 Public alpha for synthetic/local testing. Use Node 24.22.1 (`.node-version`). Installation from source and local tarballs is supported; the scoped package names are not published to npm. [GitHub releases](https://github.com/CVamsi27/revokeproof/releases) provide verified alpha tarballs when a release is available.
 
-## Clone and run
+## Try the installed GitHub package
+
+Use Node 24.22.1 in a test project with `"type": "module"`.
 
 ```sh
-git clone https://github.com/CVamsi27/revokeproof.git
-cd revokeproof
-npm ci --ignore-scripts
-npx playwright install chromium
-npm run check
-npm run example
+npm install --save-dev --ignore-scripts https://github.com/CVamsi27/revokeproof/releases/download/v0.1.0-alpha.1/developer-pain-lab-revokeproof-0.1.0-alpha.1.tgz @playwright/test@1.64.1 ws@8.22.1
+npx --no-install playwright install chromium
+node node_modules/@developer-pain-lab/revokeproof/examples/demo.js fixed
 ```
 
-Browser integration uses matching Playwright Chromium against its explicitly started synthetic loopback server. No container engine is required for this helper. A missing browser, dead event source or failed cleanup remains a failure.
+Run the same demo with `broken` to observe a violation and exit 1, or `dead-source` to observe incomplete evidence and exit 3. The fixed case exits 0. The example uses Chromium and a synthetic loopback server.
 
-To use a tarball in another project, download this project's `.tgz` from its release and run `npm install --save-dev /absolute/path/to/the-downloaded.tgz`. Install `@playwright/test@1.64.1` and `ws@8.22.1` explicitly for the shipped browser example. The reusable helper itself does not need the synthetic server.
+Copy the ordinary Playwright test into a new folder in your test project:
 
-See [contributing](CONTRIBUTING.md), [security reporting](SECURITY.md), [changes](CHANGELOG.md) and [verification](docs/verification.md). Platform and adoption claims remain limited to recorded observations. These are ESM packages; the verified type-consumer profile is ESM/NodeNext. CommonJS compatibility is not promised; use dynamic import where needed.
+```sh
+test ! -e ./revocation-example && cp -R node_modules/@developer-pain-lab/revokeproof/examples ./revocation-example
+npx --no-install playwright test --config ./revocation-example/playwright.config.js
+```
 
-Test whether an **existing connection** stops receiving protected events after access is revoked. Keep the original capability open, prove that it worked before revocation, and require a live unaffected control afterwards.
-
-This is a local OSS prototype, not a security scanner or a claim about an application's complete authorization behavior. Developer adoption and setup-time savings remain **unvalidated**.
+Use your own setup and cleanup callbacks when adapting this test. The fixture uses `ws`. See [the pilot guide](docs/pilot.md) and [contributor checks](CONTRIBUTING.md).
 
 ## Run the synthetic proof
 
@@ -49,20 +49,7 @@ node examples/demo.js dead-source   # exit 3: control never receives the post-re
 
 The synthetic fixture binds only to `127.0.0.1` on an ephemeral port. It uses fake identities, has no database or production configuration, and terminates its sockets and server after every case. Its administrative header is deliberately synthetic and must never be copied into a real application's authentication design.
 
-## Install a local packed artifact
-
-The package is not published to npm. Create a tarball with `npm pack`, then in a separate test project:
-
-```sh
-npm install --save-dev /absolute/path/to/developer-pain-lab-revokeproof-0.1.0-alpha.0.tgz @playwright/test ws
-npx playwright install chromium
-cp -R node_modules/@developer-pain-lab/revokeproof/examples ./revocation-example
-npx playwright test --config revocation-example/playwright.config.js
-```
-
-`@playwright/test` is a peer dependency. `ws` is needed only to run the shipped synthetic server and must be installed explicitly in a clean consumer. The reusable helper itself has no runtime dependencies beyond Node built-ins. Copying the examples creates an ordinary project-owned Playwright test; replace its synthetic setup with application-owned test fixtures.
-
-The copied test expects a passing policy. Set `REVOKEPROOF_SYNTHETIC_MODE=broken` or `dead-source` when running it to see the same regression test fail. The all-cases integration runner instead asserts that these deliberate negative modes are detected.
+For the copied test, `REVOKEPROOF_SYNTHETIC_MODE=broken` or `dead-source` makes the passing assertion fail. The report attachment explains the violation or missing observation. The integration suite verifies all three expected outcomes.
 
 ## Application-owned callbacks
 
@@ -95,6 +82,8 @@ The helper first proves HTTP and stream access for both identities. Only then do
 Every callback should respect its supplied `AbortSignal`. A JavaScript promise cannot forcibly stop arbitrary user code that ignores cancellation; application-owned cleanup must still close its resources. The helper bounds its own waiting and reports missing evidence instead of passing.
 
 ## Evidence and failure semantics
+
+`deadlineMs` is the grace period after the revoke acknowledgment. The timeline records when the HTTP probe starts and when canary emission starts. The two observations may occur at different times. A pass applies to the sampled responses and canary window.
 
 A report keeps execution, observations, assertions, and cleanup separate. It contains generated canary IDs, receipt flags, HTTP statuses, policy durations, and a bounded fixed-label timeline. It excludes frame bodies, URLs, cookies, credentials, and callback exception text.
 

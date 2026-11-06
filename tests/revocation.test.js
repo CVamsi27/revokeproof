@@ -145,6 +145,12 @@ test('events during asynchronous cleanup cannot mutate a closed observation wind
 test('a zero grace deadline checks immediately after acknowledged revocation', async () => {
   const result = await rehearseRevocation({ ...harness().options, deadlineMs: 0 });
   assert.equal(result.status, 'passed');
+  const labels = result.timeline.map(entry => entry.kind);
+  const http = labels.indexOf('post-revocation-http-probe-started');
+  const canary = labels.indexOf('post-revocation-canary-emission-started');
+  assert.ok(http > labels.indexOf('declared-revocation-deadline-reached'));
+  assert.ok(canary > http);
+  assert.ok(labels.indexOf('after-canary-control-received') > canary);
 });
 
 test('a delivered forbidden canary remains a finding when emit later throws', async () => {

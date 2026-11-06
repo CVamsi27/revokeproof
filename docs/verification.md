@@ -1,5 +1,9 @@
 # Revokeproof verification
 
+## Alpha.1 sampling timeline — 6 November 2026
+
+Source checks passed 19 tests and the strict TypeScript consumer. Chromium verified six helper and plain Playwright controls and the ordinary Playwright test. The timeline distinguishes the start of sampled HTTP access and canary emission from the elapsed grace period.
+
 ## Independent folder split — 5 November 2026
 
 The implementation moved from the lab's workspace into its own sibling project folder. It has its own package manifest, frozen npm lockfile, source, tests, examples, license, operating rules and development scripts. Package identity and public APIs are unchanged. No project imports another project or the lab at runtime.

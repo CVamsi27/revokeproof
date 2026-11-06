@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-alpha.1 — 2026-11-06
+
+Record when post-revocation HTTP sampling and canary emission start. Lead with the pinned GitHub package and copied Playwright test.
+
 ## 0.1.0-alpha.0 — 2026-11-05
 
 First public alpha source release.

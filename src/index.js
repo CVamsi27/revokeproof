@@ -109,6 +109,7 @@ export async function rehearseRevocation(input) {
     await sleep(options.deadlineMs);
     note('declared-revocation-deadline-reached');
     phase = 'after-http';
+    note('post-revocation-http-probe-started');
     report.http.after = { subject: null, control: null };
     report.http.after.subject = checkedStatus(await run(signal => capabilities.subject.readHttp(signal)));
     if (allowed(report.http.after.subject)) report.violations.push('fresh-http-still-allowed');
@@ -118,6 +119,7 @@ export async function rehearseRevocation(input) {
     phase = 'after-event';
     activeWindow = 'after';
     // The post-deadline ID is never emitted before the acknowledged boundary and grace period.
+    note('post-revocation-canary-emission-started');
     if (await run(signal => options.emit(eventIds.after, signal)) !== true) throw new ObservationMissing();
     await sleep(options.observationMs);
     activeWindow = null;
